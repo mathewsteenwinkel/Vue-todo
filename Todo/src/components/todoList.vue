@@ -1,12 +1,13 @@
 <script setup>
-import { ref, watch, onMounted } from 'vue';
+import { ref } from 'vue';
 
 const todos = ref([]);
 const title = ref([])
 const input_title = ref('')
-const name = ref('')
 const input_content = ref('')
 
+
+//title logic
 const addtitle = () => {
   if (input_title.value.trim() === "" || input_title.value === null) {
     return
@@ -20,7 +21,7 @@ const addtitle = () => {
 
 }
 
-
+//todo list item logic
 const addtodo = () => {
   if (input_content.value.trim() === "" || input_content.value === null) {
     return
@@ -32,16 +33,12 @@ const addtodo = () => {
     createdAt: new Date().getTime()
   })
   input_content.value = "";
-
 }
 
-watch(name, (newVal) => {
-  localStorage.setItem("name", newVal)
-})
+const removetodo = (todoToRemove) => {
+  todos.value = todos.value.filter((todo) => todo !== todoToRemove);
+};
 
-onMounted(() => {
-  name.value = localStorage.getItem("name") || " "
-})
 
 </script>
 
@@ -61,9 +58,7 @@ onMounted(() => {
         </button>
       </div>
     </form>
-
     <form @submit.prevent="addtodo">
-
       <div class="body">
         <input type="text" name="category" placeholder="Create a to do item" class="input_field"
           v-model="input_content" />
@@ -72,9 +67,7 @@ onMounted(() => {
         </button>
       </div>
     </form>
-
-
-    <section>
+    <section class="todo_list">
       <section>
         <h3>Your Todo Lists:</h3>
         <ul>
@@ -87,6 +80,9 @@ onMounted(() => {
       <ul class="box">
         <div v-for="(todo, index) in todos" :key="index" class="todo-item">
           <input class="items" type="text" v-model="todo.content" />
+          <button class="delete" @click="removetodo(todo)">
+            delete
+          </button>
         </div>
       </ul>
     </section>
@@ -162,6 +158,18 @@ input {
   margin: 0;
   height: 50px;
   border: 0;
+
+}
+
+.todo_list {
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  justify-content: center;
+  margin-top: 100px;
+  width: 60vw;
+  border-radius: 15px;
+  background-color: rgb(246, 246, 231);
 
 }
 </style>

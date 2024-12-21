@@ -1,11 +1,12 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 
 const todos = ref([]);
-const title = ref([])
-const input_title = ref('')
-const input_content = ref('')
+const title = ref([]);
+const input_title = ref('');
+const input_content = ref('');
 
+const showTitleInput = computed(() => title.value.length === 0);
 
 //title logic
 const addtitle = () => {
@@ -48,11 +49,16 @@ const removetodo = (todoToRemove) => {
     <h1>
       Let's make a todo list in my vue todo app!
     </h1>
-
-    <form @submit.prevent="addtitle">
-
+    <form v-if="showTitleInput" @submit.prevent="addtitle">
       <div class="body">
-        <input type="text" name="category" placeholder="name your todo list" class="title" v-model="input_title" />
+        <input 
+        type="text" 
+        name="category" 
+        placeholder="Name your to do list" 
+        class="input_field" 
+        v-model="input_title" 
+        
+        />
         <button class="submit_button">
           Submit
         </button>
@@ -61,7 +67,7 @@ const removetodo = (todoToRemove) => {
     <form @submit.prevent="addtodo">
       <div class="body">
         <input type="text" name="category" placeholder="Create a to do item" class="input_field"
-          v-model="input_content" />
+          v-model="input_content"/>
         <button class="submit_button">
           Submit
         </button>
@@ -69,19 +75,19 @@ const removetodo = (todoToRemove) => {
     </form>
     <section class="todo_list">
       <section>
-        <h3>Your Todo Lists:</h3>
+        <h3 class="title-list">Your Todo Lists:</h3>
         <ul>
-          <div v-for="(item, index) in title" :key="index">
+          <div v-for="(item, index) in title" :key="index" class="title-show">
             {{ item.content }}
           </div>
         </ul>
       </section>
-      <h3>Edit Todos:</h3>
       <ul class="box">
         <div v-for="(todo, index) in todos" :key="index" class="todo-item">
+          <input type="checkbox" class="checkmark"> 
           <input class="items" type="text" v-model="todo.content" />
           <button class="delete" @click="removetodo(todo)">
-            delete
+            Delete
           </button>
         </div>
       </ul>
@@ -112,53 +118,49 @@ h3 {
   padding: 0;
 }
 
-.input_field {
-  padding: 5px;
-  margin-right: 20px;
+.body{
+  height: 100px;
+  display: flex;
+  align-content: center;
+  justify-content: center;
 }
 
 .submit_button {
-  font-size: 20px;
+  font-size: 14px;
   border: 0;
   border-radius: 50%;
   background-color: rgb(255, 0, 0);
   box-shadow: 2px 5px rgb(195, 0, 0);
-  ;
-  height: 80px;
-  width: 80px;
+  height: 60px;
+  width: 60px;
   cursor: pointer;
   outline: none;
 }
 
 .submit_button:active {
   transform: translateY(4px);
-  box-shadow: 0 0 #021faf;
-  width: 77px;
-  height: 77px;
+  box-shadow: 0 0 ;
+  width: 58px;
+  height: 58px;
 }
 
 .submit_button:hover {
   transform: scale(1.1);
 }
 
-input {
-  width: 400px;
-  font-size: 30px;
-
-}
-
 .box {
-  background-color: #021faf;
   margin: 0;
   padding: 0;
 }
 
 .todo-item {
-  padding: 0;
+  padding: 20px;
   margin: 0;
   height: 50px;
   border: 0;
-
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .todo_list {
@@ -166,10 +168,71 @@ input {
   flex-direction: column;
   align-content: center;
   justify-content: center;
-  margin-top: 100px;
+  margin-top: 50px;
   width: 60vw;
   border-radius: 15px;
-  background-color: rgb(246, 246, 231);
-
 }
+
+.delete{
+  font-size: 14px;
+  border: 0;
+  border-radius: 50%;
+  background-color: rgb(255, 0, 0);
+  box-shadow: 2px 5px rgb(195, 0, 0);
+  height: 50px;
+  width: 50px;
+  cursor: pointer;
+  outline: none;
+}
+
+.input_field{
+  border: 0;
+  margin-right: 20px;
+  height: 50px;
+  width: 400px;
+  font-size: 30px;
+  filter: drop-shadow( 4px 5px 4px );
+  padding: 10px;
+  border-radius: 20px;
+}
+
+.title-show{
+  display: flex;
+  justify-content: center;
+  font-style: italic;
+}
+
+.items{
+  border: 0;
+  font-size: 24px;
+  background-color: transparent;
+  padding: 10px;
+  margin-right: 10px;
+}
+
+.title-list{
+  display: flex;
+  justify-content: center;
+  padding: 0;
+}
+
+.checkmark:after {
+  left: 9px;
+  top: 5px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+.checkmark {
+
+  height: 25px;
+  width: 25px;
+  background-color: #eee;
+}
+
 </style>
